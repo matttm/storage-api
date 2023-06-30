@@ -1,7 +1,7 @@
 const { createDbInstance } = require("./database");
 
 async function createApp() {
-  const instance = await createDbInstance();
+  // const instance = await createDbInstance();
 
   try {
     await instance.authenticate();
