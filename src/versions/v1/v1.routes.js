@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const storageRouter = require('storage/storage.routes');
+const storageRouter = require("./storage/storage.routes");
 
 const v1 = Router();
 
