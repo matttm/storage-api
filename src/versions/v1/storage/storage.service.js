@@ -13,7 +13,8 @@ function StorageService() {
     Expires: 60 * 60,
     ContentType: "image/*",
   };
-  function _getPresignedUrl(s3, s3Params) {
+
+  function _getPresignedUrl() {
     return new Promise(async (resolve, reject) => {
       try {
         const client = new S3Client({
@@ -22,16 +23,21 @@ function StorageService() {
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
           },
         });
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(client, command, { expiresIn: 3600 });
+        const command = new GetObjectCommand({
+          Bucket: process.env.S3_BUCKET_NAME,
+        });
+        const url = await getSignedUrl(client, command, {
+          expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
+        });
       } catch (error) {
         return reject(error);
       }
     });
   }
+
   const getPresignedUrl = async () => {
     try {
-      const url = await _getPresignedUrl(s3, s3Params);
+      const url = await _getPresignedUrl();
       if (url) return url;
       throw new Error("Error due to no url being returned");
     } catch (e) {
