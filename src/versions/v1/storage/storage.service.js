@@ -2,14 +2,14 @@ const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
 
 function StorageService() {
-  config.update({
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  });
+  // config.update({
+  //   region: process.env.AWS_REGION,
+  //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  // });
   const s3Params = {
-    Bucket: process.env.S3_BUCKET_NAME,
-    Key: process.env.FILENAME,
+    Bucket: process.env.S3_BUCKET_NAME || "storage-a[i",
+    Key: "test",
     Expires: 60 * 60,
     ContentType: "image/*",
   };
@@ -19,16 +19,21 @@ function StorageService() {
       try {
         const client = new S3Client({
           credentials: {
+            region: process.env.AWS_REGION,
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
           },
         });
         const command = new GetObjectCommand({
-          Bucket: process.env.S3_BUCKET_NAME,
+          Bucket: process.env.S3_BUCKET_NAME || "storage-a[i",
+          Key: "test",
+          Expires: 60 * 60,
+          ContentType: "image/*",
         });
         const url = await getSignedUrl(client, command, {
           expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
         });
+        resolve(url);
       } catch (error) {
         return reject(error);
       }

@@ -1,8 +1,8 @@
-const express = require('express');
-const StorageController = require('./storage,controller')
+const express = require("express");
+const storageController = require("./storage,controller");
 
 const storageRoutes = express.Router();
 
-storageRoutes.get('presigned-url', StorageController.getPresignedUrl);
+storageRoutes.get("/presigned-url", storageController.getPresignedUrl);
 
 module.exports = storageRoutes;
