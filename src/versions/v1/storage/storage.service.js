@@ -25,7 +25,7 @@ function StorageService() {
           },
         });
         const command = new GetObjectCommand({
-          Bucket: process.env.S3_BUCKET_NAME || "storage-a[i",
+          Bucket: process.env.S3_BUCKET_NAME || "storage-api",
           Key: "test",
           Expires: 60 * 60,
           ContentType: "image/*",
