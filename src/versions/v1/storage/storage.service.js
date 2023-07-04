@@ -4,6 +4,8 @@ const {
   GetObjectCommand,
   PutObjectCommand,
 } = require("@aws-sdk/client-s3");
+const { request } = require("https");
+const { Blob } = require("node:buffer");
 
 function StorageService() {
   // config.update({
@@ -43,11 +45,30 @@ function StorageService() {
       }
     });
   }
-
-  const getPresignedUrl = async () => {
+  function _putObject(url, data) {
+    return new Promise((resolve, reject) => {
+      const req = request(
+        url,
+        { method: "PUT", headers: { "Content-Length": new Blob([data]).size } },
+        (res) => {
+          let responseBody = "";
+          res.on("data", (chunk) => {
+            responseBody += chunk;
+          });
+          res.on("end", () => {
+            resolve(responseBody);
+          });
+        }
+      );
+      req.on("error", (err) => {
+        reject(err);
+      });
+    });
+  }
+  const putObjectInS3 = async (file) => {
     try {
       const url = await _getPresignedUrl();
-      if (url) return url;
+      await _putObject(url, file);
       throw new Error("Error due to no url being returned");
     } catch (e) {
       console.error(e);
@@ -55,7 +76,7 @@ function StorageService() {
     }
   };
   return Object.freeze({
-    getPresignedUrl,
+    putObjectInS3,
   });
 }
 

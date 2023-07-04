@@ -3,6 +3,6 @@ const storageController = require("./storage,controller");
 
 const storageRoutes = express.Router();
 
-storageRoutes.get("/presigned-url", storageController.getPresignedUrl);
+storageRoutes.put("/new-file", storageController.getPresignedUrl);
 
 module.exports = storageRoutes;
