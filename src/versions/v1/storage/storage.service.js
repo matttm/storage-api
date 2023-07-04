@@ -1,5 +1,9 @@
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+const {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+} = require("@aws-sdk/client-s3");
 
 function StorageService() {
   // config.update({
@@ -24,7 +28,7 @@ function StorageService() {
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
           },
         });
-        const command = new GetObjectCommand({
+        const command = new PutObjectCommand({
           Bucket: process.env.S3_BUCKET_NAME || "storage-api",
           Key: "test",
           Expires: 60 * 60,
