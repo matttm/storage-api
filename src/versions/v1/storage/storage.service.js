@@ -3,6 +3,7 @@ const {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
+  CreateMultipartUploadCommand,
 } = require("@aws-sdk/client-s3");
 const { request } = require("https");
 const { Blob } = require("node:buffer");
@@ -19,17 +20,16 @@ function StorageService() {
     Expires: 60 * 60,
     ContentType: "image/*",
   };
-
+  const client = new S3Client({
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+    region: process.env.AWS_REGION,
+  });
   function _getPresignedUrl() {
     return new Promise(async (resolve, reject) => {
       try {
-        const client = new S3Client({
-          credentials: {
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-          },
-          region: process.env.AWS_REGION,
-        });
         const command = new PutObjectCommand({
           Bucket: process.env.S3_BUCKET_NAME || "storage-api",
           Key: "test",
@@ -40,6 +40,28 @@ function StorageService() {
           expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
         });
         resolve(url);
+      } catch (error) {
+        return reject(error);
+      }
+    });
+  }
+
+  function _createMultiPartUpload() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const command = new CreateMultipartUploadCommand({
+          Bucket: process.env.S3_BUCKET_NAME || "storage-api",
+          Key: "test",
+          // Expires: 60 * 60,
+          ContentType: "image/*",
+        });
+        const multipartUpload = await client.send(command, {
+          expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
+        });
+        resolve({
+          fileId: multipartUpload.UploadId,
+          fileKey: multipartUpload.Key,
+        });
       } catch (error) {
         return reject(error);
       }
