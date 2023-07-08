@@ -6,7 +6,7 @@ function StorageController() {
   const getPresignedUrl = async (req, res) => {
     try {
       // console.log(`Request: ${JSON.stringify(res)}`);
-      const url = await storageService.putObjectInS3(req);
+      const url = await storageService.putObjectInS3(req.file);
       return res.status(200).json({
         url,
       });
