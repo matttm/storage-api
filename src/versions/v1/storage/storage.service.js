@@ -4,16 +4,12 @@ const {
   GetObjectCommand,
   PutObjectCommand,
   CreateMultipartUploadCommand,
+  UploadPartCommand,
 } = require("@aws-sdk/client-s3");
 const { request } = require("https");
 const { Blob } = require("node:buffer");
 
 function StorageService() {
-  // config.update({
-  //   region: process.env.AWS_REGION,
-  //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  // });
   const s3Params = {
     Bucket: process.env.S3_BUCKET_NAME || "storage-a[i",
     Key: "test",
@@ -40,6 +36,38 @@ function StorageService() {
           expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
         });
         resolve(url);
+      } catch (error) {
+        return reject(error);
+      }
+    });
+  }
+  function _getMultipartPresignedUrls(fileKey, fileId, parts) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const multipartParams = {
+          ...s3Params,
+          Key: fileKey,
+          UploadId: fileId,
+        };
+        const promises = [];
+        for (let index = 0; index < parts; index++) {
+          const command = new UploadPartCommand();
+          promises.push(
+            getSignedUrl(client, command, {
+              ...multipartParams,
+              PartNumber: index + 1,
+            })
+          );
+        }
+        const signedUrls = await Promise.all(promises);
+        // assign to each URL the index of the part to which it corresponds
+        const partSignedUrlList = signedUrls.map((signedUrl, index) => {
+          return {
+            signedUrl: signedUrl,
+            PartNumber: index + 1,
+          };
+        });
+        resolve(partSignedUrlList);
       } catch (error) {
         return reject(error);
       }
