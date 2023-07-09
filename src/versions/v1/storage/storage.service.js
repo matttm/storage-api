@@ -5,6 +5,7 @@ const {
   PutObjectCommand,
   CreateMultipartUploadCommand,
   UploadPartCommand,
+  CompleteMultipartUploadCommand,
 } = require("@aws-sdk/client-s3");
 const { request } = require("https");
 const { Blob } = require("node:buffer");
@@ -90,6 +91,33 @@ function StorageService() {
           fileId: multipartUpload.UploadId,
           fileKey: multipartUpload.Key,
         });
+      } catch (error) {
+        return reject(error);
+      }
+    });
+  }
+  function _completeMultipartUpload(fileKey, fileId, parts) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const multipartParams = {
+          ...s3Params,
+          Key: fileKey,
+          UploadId: fileId,
+          MultipartUpload: {
+            // ordering the parts to make sure they are in the right order
+            Parts: _.orderBy(parts, ["PartNumber"], ["asc"]),
+          },
+        };
+        const command = new CompleteMultipartUploadCommand({
+          Bucket: process.env.S3_BUCKET_NAME || "storage-api",
+          Key: "test",
+          // Expires: 60 * 60,
+          ContentType: "image/*",
+        });
+        const multipartUpload = await client.send(command, {
+          expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
+        });
+        resolve();
       } catch (error) {
         return reject(error);
       }
