@@ -7,6 +7,7 @@ const {
   UploadPartCommand,
   CompleteMultipartUploadCommand,
 } = require("@aws-sdk/client-s3");
+const s3 = require("@aws-sdk/s3-request-presigner");
 const { request } = require("https");
 const { Blob } = require("node:buffer");
 
@@ -146,8 +147,10 @@ function StorageService() {
   const putObjectInS3 = async (file) => {
     try {
       const url = await _getPresignedUrl();
+      if (!url) {
+        throw new Error("Error due to no url being returned");
+      }
       await _putObject(url, file);
-      throw new Error("Error due to no url being returned");
     } catch (e) {
       console.error(e);
       throw new Error("Error occurred getting presigned url");

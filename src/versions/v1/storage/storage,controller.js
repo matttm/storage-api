@@ -1,5 +1,3 @@
-const { config } = require("aws-sdk");
-const s3 = require("aws-sdk/clients/s3");
 const storageService = require("./storage.service");
 
 function StorageController() {
