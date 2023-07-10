@@ -5,11 +5,7 @@ const upload = multer({ dest: "uploads/" });
 
 const storageRoutes = express.Router();
 
-storageRoutes.put(
-  "/presigned-url",
-  upload.single("file"),
-  storageController.getPresignedUrl
-);
+storageRoutes.get("/presigned-url", storageController.getPresignedUrl);
 
 storageRoutes.put(
   "/file",

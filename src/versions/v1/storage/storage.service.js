@@ -29,7 +29,7 @@ function StorageService() {
     return new Promise(async (resolve, reject) => {
       try {
         const command = new PutObjectCommand({
-          Bucket: process.env.S3_BUCKET_NAME || "storage-api",
+          Bucket: process.env.S3_BUCKET_NAME || "maloney-storage",
           Key: "test",
           // Expires: 60 * 60,
           ContentType: "image/*",
@@ -80,7 +80,7 @@ function StorageService() {
     return new Promise(async (resolve, reject) => {
       try {
         const command = new CreateMultipartUploadCommand({
-          Bucket: process.env.S3_BUCKET_NAME || "storage-api",
+          Bucket: process.env.S3_BUCKET_NAME || "maloney-storage",
           Key: "test",
           // Expires: 60 * 60,
           ContentType: "image/*",
@@ -110,7 +110,7 @@ function StorageService() {
           },
         };
         const command = new CompleteMultipartUploadCommand({
-          Bucket: process.env.S3_BUCKET_NAME || "storage-api",
+          Bucket: process.env.S3_BUCKET_NAME || "maloney-storage",
           Key: "test",
           // Expires: 60 * 60,
           ContentType: "image/*",
@@ -158,7 +158,7 @@ function StorageService() {
     }
   };
   return Object.freeze({
-    _getPresignedUrl,
+    getPresignedUrl: _getPresignedUrl,
     putObjectInS3,
   });
 }
