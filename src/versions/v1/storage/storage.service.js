@@ -150,6 +150,7 @@ function StorageService() {
       if (!url) {
         throw new Error("Error due to no url being returned");
       }
+      console.log(`Presigned url: ${url}`);
       await _putObject(url, file);
     } catch (e) {
       console.error(e);
@@ -157,6 +158,7 @@ function StorageService() {
     }
   };
   return Object.freeze({
+    _getPresignedUrl,
     putObjectInS3,
   });
 }
