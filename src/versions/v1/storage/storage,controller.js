@@ -1,11 +1,10 @@
-const { config } = require("aws-sdk");
-const s3 = require("aws-sdk/clients/s3");
 const storageService = require("./storage.service");
 
 function StorageController() {
   const getPresignedUrl = async (req, res) => {
     try {
-      const url = await storageService.getPresignedUrl();
+      // console.log(`Request: ${JSON.stringify(res)}`);
+      const url = await storageService.getPresignedUrl(req.file);
       return res.status(200).json({
         url,
       });
@@ -14,8 +13,18 @@ function StorageController() {
       return res.status(500).send(e);
     }
   };
+  const putObjectInS3 = async (req, res) => {
+    try {
+      await storageService.putObjectInS3(req.file);
+      return res.status(200).json();
+    } catch (e) {
+      console.error(e);
+      return res.status(500).send(e);
+    }
+  };
   return Object.freeze({
     getPresignedUrl,
+    putObjectInS3,
   });
 }
 
