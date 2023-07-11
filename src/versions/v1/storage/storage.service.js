@@ -141,8 +141,7 @@ function StorageService() {
         throw new Error("Error due to no url being returned");
       }
       console.log(`Presigned url: ${url}`);
-      // console.log(`File: ${JSON.stringify(file)}`);+
-      const buff = Buffer.of(file.buffer);
+      const buff = file.buffer;
       console.log(`Buffer: ${buff}`);
       const putRes = await _putObject(url, buff);
       console.log(`putRes: ${putRes.data}`);
