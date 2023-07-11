@@ -26,14 +26,16 @@ function StorageService() {
     },
     region: process.env.AWS_REGION,
   });
-  function _getPresignedUrl() {
+  function _getPresignedUrl(filename, mimetype) {
     return new Promise(async (resolve, reject) => {
       try {
+        filename = filename || "test";
+        mimetype = mimetype || "text/plain";
         const command = new PutObjectCommand({
           Bucket: process.env.S3_BUCKET_NAME || "maloney-storage",
-          Key: "test",
+          Key: filename,
           // Expires: 60 * 60,
-          ContentType: "image/*",
+          ContentType: mimetype,
         });
         const url = await getSignedUrl(client, command, {
           expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
@@ -134,14 +136,15 @@ function StorageService() {
   }
   const putObjectInS3 = async (file) => {
     try {
-      const url = await _getPresignedUrl();
+      const url = await _getPresignedUrl(file.originalname, file.mimetype);
       if (!url) {
         throw new Error("Error due to no url being returned");
       }
       console.log(`Presigned url: ${url}`);
-      console.log(`File: ${JSON.stringify(file)}`);
-      // console.log(`Buffer: ${file.buffer}`);
-      const putRes = await _putObject(url, file.buffer?.data);
+      // console.log(`File: ${JSON.stringify(file)}`);+
+      const buff = Buffer.of(file.buffer);
+      console.log(`Buffer: ${buff}`);
+      const putRes = await _putObject(url, buff);
       console.log(`putRes: ${putRes.data}`);
     } catch (e) {
       console.error(e);
