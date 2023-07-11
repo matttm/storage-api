@@ -10,6 +10,7 @@ const {
 const s3 = require("@aws-sdk/s3-request-presigner");
 const { request } = require("https");
 const { Blob } = require("node:buffer");
+const axios = require("axios");
 
 function StorageService() {
   const s3Params = {
@@ -125,23 +126,10 @@ function StorageService() {
     });
   }
   function _putObject(url, data) {
-    return new Promise((resolve, reject) => {
-      const req = request(
-        url,
-        { method: "PUT", headers: { "Content-Length": new Blob([data]).size } },
-        (res) => {
-          let responseBody = "";
-          res.on("data", (chunk) => {
-            responseBody += chunk;
-          });
-          res.on("end", () => {
-            resolve(responseBody);
-          });
-        }
-      );
-      req.on("error", (err) => {
-        reject(err);
-      });
+    return axios.put(url, data, {
+      headers: {
+        "Content-Type": "application/pdf",
+      },
     });
   }
   const putObjectInS3 = async (file) => {
@@ -151,7 +139,10 @@ function StorageService() {
         throw new Error("Error due to no url being returned");
       }
       console.log(`Presigned url: ${url}`);
-      await _putObject(url, file);
+      console.log(`File: ${JSON.stringify(file)}`);
+      // console.log(`Buffer: ${file.buffer}`);
+      const putRes = await _putObject(url, file.buffer?.data);
+      console.log(`putRes: ${putRes.data}`);
     } catch (e) {
       console.error(e);
       throw new Error("Error occurred getting presigned url");
