@@ -1,19 +1,21 @@
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
-    "TransactionType",
+    "FileType",
     {
-      transactionTypeId: {
-        field: "TRANSACTION_TYPE_ID",
+      bloodTypeId: {
+        field: "FILE_TYPE_ID",
         type: Sequelize.STRING,
         primaryKey: true,
+        notNull: true,
       },
-      transactionTypeDesc: {
-        field: "TRANSACTION_TYPE_DESC",
+      bloodTypeDesc: {
+        field: "FILE_TYPE_DESC",
         type: Sequelize.STRING,
+        notNull: true,
       },
     },
     {
-      tableName: "TRANSACTION_TYPE",
+      tableName: "FILE_TYPE",
     }
   );
 };

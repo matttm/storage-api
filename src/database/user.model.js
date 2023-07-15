@@ -1,9 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
-    "Donor",
+    "User",
     {
       donorId: {
-        field: "DONOR_ID",
+        field: "USER_ID",
         type: Sequelize.UUID,
         primaryKey: true,
       },
@@ -20,10 +20,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      bloodType: {
-        field: "BLOOD_TYPE",
-        type: Sequelize.STRING,
-      },
       createdAt: {
         field: "CREATED_AT",
         type: "TIMESTAMP",
@@ -36,7 +32,7 @@ module.exports = (sequelize, Sequelize) => {
       },
     },
     {
-      tableName: "DONOR",
+      tableName: "USER",
     }
   );
 };
