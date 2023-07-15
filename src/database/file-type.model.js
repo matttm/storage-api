@@ -2,13 +2,13 @@ module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
     "FileType",
     {
-      bloodTypeId: {
+      fileTypeId: {
         field: "FILE_TYPE_ID",
         type: Sequelize.STRING,
         primaryKey: true,
         notNull: true,
       },
-      bloodTypeDesc: {
+      fileTypeDesc: {
         field: "FILE_TYPE_DESC",
         type: Sequelize.STRING,
         notNull: true,

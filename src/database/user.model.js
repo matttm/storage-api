@@ -2,7 +2,7 @@ module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
     "User",
     {
-      donorId: {
+      userId: {
         field: "USER_ID",
         type: Sequelize.UUID,
         primaryKey: true,
