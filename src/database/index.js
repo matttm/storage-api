@@ -1,6 +1,6 @@
 const dbConfig = require("../../db.config");
 const fs = require("fs");
-const Sequelize = require("sequelize");
+const Sequelize = require("@sequelize/core");
 
 function createDbInstance() {
   return new Promise((res, rej) => {
@@ -11,6 +11,9 @@ function createDbInstance() {
       {
         host: dbConfig.HOST,
         dialect: dbConfig.dialect,
+        dialectOptions: {
+          ssl: "Amazon RDS",
+        },
         define: {
           timestamps: false,
         },

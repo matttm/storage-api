@@ -1,23 +1,24 @@
+const { DataTypes } = require("@sequelize/core");
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
     "User",
     {
       userId: {
         field: "USER_ID",
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         primaryKey: true,
       },
       firstName: {
         field: "FIRST_NAME",
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
       },
       lastName: {
         field: "LAST_NAME",
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
       },
       email: {
         field: "EMAIL",
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       createdAt: {
