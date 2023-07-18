@@ -4,30 +4,30 @@ module.exports = (sequelize, Sequelize) => {
     "User",
     {
       userId: {
-        field: "USER_ID",
+        columnName: "USER_ID",
         type: DataTypes.UUID,
         primaryKey: true,
       },
       firstName: {
-        field: "FIRST_NAME",
+        columnName: "FIRST_NAME",
         type: DataTypes.STRING,
       },
       lastName: {
-        field: "LAST_NAME",
+        columnName: "LAST_NAME",
         type: DataTypes.STRING,
       },
       email: {
-        field: "EMAIL",
+        columnName: "EMAIL",
         type: DataTypes.STRING,
         allowNull: true,
       },
       createdAt: {
-        field: "CREATED_AT",
+        columnName: "CREATED_AT",
         type: "TIMESTAMP",
         allowNull: false,
       },
       updatedAt: {
-        field: "UPDATED_AT",
+        columnName: "UPDATED_AT",
         type: "TIMESTAMP",
         allowNull: false,
       },

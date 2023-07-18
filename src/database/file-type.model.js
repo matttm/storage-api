@@ -4,13 +4,13 @@ module.exports = (sequelize, Sequelize) => {
     "FileType",
     {
       fileTypeId: {
-        field: "FILE_TYPE_ID",
+        columnName: "FILE_TYPE_ID",
         type: DataTypes.STRING,
         primaryKey: true,
         notNull: true,
       },
       fileTypeDesc: {
-        field: "FILE_TYPE_DESC",
+        columnName: "FILE_TYPE_DESC",
         type: DataTypes.STRING,
         notNull: true,
       },
