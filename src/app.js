@@ -1,14 +1,14 @@
 const { createDbInstance } = require("./database");
 
 async function createApp() {
-  // const instance = await createDbInstance();
+  const instance = await createDbInstance();
 
-  // try {
-  //   await instance.authenticate();
-  //   console.log("Connection has been established successfully.");
-  // } catch (error) {
-  //   console.error("Unable to connect to the database:", error);
-  // }
+  try {
+    await instance.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 
   // these are not being required until the db cinn is
   // is established, so the mw function can get a proper model
