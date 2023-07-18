@@ -40,6 +40,10 @@ function StorageService() {
         const url = await getSignedUrl(client, command, {
           expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
         });
+        if (!url) {
+          throw new Error("Error due to no url being returned");
+        }
+        console.log(`Presigned url: ${url}`);
         resolve(url);
       } catch (error) {
         return reject(error);
@@ -141,10 +145,6 @@ function StorageService() {
         file.mimetype,
         PutObjectCommand
       );
-      if (!url) {
-        throw new Error("Error due to no url being returned");
-      }
-      console.log(`Presigned url: ${url}`);
       const buff = file.buffer;
       console.log(`Buffer: ${buff}`);
       const putRes = await _putObject(url, buff);
@@ -161,10 +161,6 @@ function StorageService() {
         file.mimetype,
         PutObjectCommand
       );
-      if (!url) {
-        throw new Error("Error due to no url being returned");
-      }
-      console.log(`Presigned url: ${url}`);
     } catch (e) {
       console.error(e);
       throw new Error("Error occurred getting presigned url");
