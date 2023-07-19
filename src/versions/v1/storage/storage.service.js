@@ -154,32 +154,21 @@ function StorageService() {
       throw new Error("Error occurred while putting object in S3");
     }
   };
-  const getPutPresignedUrl = async (file) => {
+  const getPresignedUrl = (command) => async (file) => {
     try {
       const url = await _getPresignedUrl(
         file.originalname,
         file.mimetype,
-        PutObjectCommand
+        command
       );
     } catch (e) {
       console.error(e);
-      throw new Error("Error occurred getting PUT presigned url");
-    }
-  };
-  const getGetPresignedUrl = async (file) => {
-    try {
-      const url = await _getPresignedUrl(
-        file.originalname,
-        file.mimetype,
-        PutObjectCommand
-      );
-    } catch (e) {
-      console.error(e);
-      throw new Error("Error occurred getting GET presigned url");
+      throw new Error(`Error occurred getting presigned url`);
     }
   };
   return Object.freeze({
-    getPutPresignedUrl,
+    getPutPresignedUrl: getPresignedUrl(PutObjectCommand),
+    getGetPresignedUrl: getPresignedUrl(GetObjectCommand),
     putObjectInS3,
   });
 }
