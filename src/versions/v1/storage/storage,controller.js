@@ -3,8 +3,7 @@ const storageService = require("./storage.service");
 function StorageController() {
   const getPresignedUrl = async (req, res) => {
     try {
-      // console.log(`Request: ${JSON.stringify(res)}`);
-      const url = await storageService.getPresignedUrl(req.file);
+      const url = await storageService.getPutPresignedUrl(req.file);
       return res.status(200).json({
         url,
       });
