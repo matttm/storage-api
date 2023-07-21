@@ -1,9 +1,20 @@
 const storageService = require("./storage.service");
 
 function StorageController() {
-  const getPresignedUrl = async (req, res) => {
+  const getPutPresignedUrl = async (req, res) => {
     try {
       const url = await storageService.getPutPresignedUrl(req.file);
+      return res.status(200).json({
+        url,
+      });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).send(e);
+    }
+  };
+  const getGetPresignedUrl = async (req, res) => {
+    try {
+      const url = await storageService.getGetPresignedUrl(req.file);
       return res.status(200).json({
         url,
       });
@@ -22,7 +33,8 @@ function StorageController() {
     }
   };
   return Object.freeze({
-    getPresignedUrl,
+    getPutPresignedUrl,
+    getGetPresignedUrl,
     putObjectInS3,
   });
 }
