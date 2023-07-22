@@ -161,6 +161,7 @@ function StorageService() {
         file.mimetype,
         command
       );
+      return url;
     } catch (e) {
       console.error(e);
       throw new Error(`Error occurred getting presigned url`);

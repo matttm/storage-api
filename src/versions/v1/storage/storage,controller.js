@@ -3,6 +3,7 @@ const storageService = require("./storage.service");
 function StorageController() {
   const getPutPresignedUrl = async (req, res) => {
     try {
+      console.log(req);
       const url = await storageService.getPutPresignedUrl(req.file);
       return res.status(200).json({
         url,
@@ -14,7 +15,14 @@ function StorageController() {
   };
   const getGetPresignedUrl = async (req, res) => {
     try {
-      const url = await storageService.getGetPresignedUrl(req.file);
+      const {
+        body: { filename, mimetype },
+      } = req;
+      const file = {
+        originalname: filename,
+        mimetype,
+      };
+      const url = await storageService.getGetPresignedUrl(file);
       return res.status(200).json({
         url,
       });
