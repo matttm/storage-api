@@ -1,7 +1,7 @@
 const express = require("express");
 const storageController = require("./storage,controller");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({});
 
 const storageRoutes = express.Router();
 
