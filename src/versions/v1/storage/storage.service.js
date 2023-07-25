@@ -14,7 +14,7 @@ const axios = require("axios");
 
 function StorageService() {
   const s3Params = {
-    Bucket: process.env.S3_BUCKET_NAME || "storage-a[i",
+    Bucket: process.env.S3_BUCKET_NAME || "storage-api",
     Key: "test",
     Expires: 60 * 60,
     ContentType: "image/*",
@@ -26,12 +26,12 @@ function StorageService() {
     },
     region: process.env.AWS_REGION,
   });
-  function _getPresignedUrl(filename, mimetype) {
+  function _getPresignedUrl(filename, mimetype, CommandClass) {
     return new Promise(async (resolve, reject) => {
       try {
         filename = filename || "test";
         mimetype = mimetype || "text/plain";
-        const command = new PutObjectCommand({
+        const command = new CommandClass({
           Bucket: process.env.S3_BUCKET_NAME || "maloney-storage",
           Key: filename,
           // Expires: 60 * 60,
@@ -40,6 +40,10 @@ function StorageService() {
         const url = await getSignedUrl(client, command, {
           expiresIn: process.env.S3_REQUEST_EXPIRES_IN || 6000,
         });
+        if (!url) {
+          throw new Error("Error due to no url being returned");
+        }
+        console.log(`Presigned url: ${url}`);
         resolve(url);
       } catch (error) {
         return reject(error);
@@ -136,22 +140,36 @@ function StorageService() {
   }
   const putObjectInS3 = async (file) => {
     try {
-      const url = await _getPresignedUrl(file.originalname, file.mimetype);
-      if (!url) {
-        throw new Error("Error due to no url being returned");
-      }
-      console.log(`Presigned url: ${url}`);
+      const url = await _getPresignedUrl(
+        file.originalname,
+        file.mimetype,
+        PutObjectCommand
+      );
       const buff = file.buffer;
       console.log(`Buffer: ${buff}`);
       const putRes = await _putObject(url, buff);
       console.log(`putRes: ${putRes.data}`);
     } catch (e) {
       console.error(e);
-      throw new Error("Error occurred getting presigned url");
+      throw new Error("Error occurred while putting object in S3");
+    }
+  };
+  const getPresignedUrl = (command) => async (file) => {
+    try {
+      const url = await _getPresignedUrl(
+        file.originalname,
+        file.mimetype,
+        command
+      );
+      return url;
+    } catch (e) {
+      console.error(e);
+      throw new Error(`Error occurred getting presigned url`);
     }
   };
   return Object.freeze({
-    getPresignedUrl: _getPresignedUrl,
+    getPutPresignedUrl: getPresignedUrl(PutObjectCommand),
+    getGetPresignedUrl: getPresignedUrl(GetObjectCommand),
     putObjectInS3,
   });
 }
