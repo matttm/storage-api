@@ -5,5 +5,4 @@ const multer = require("multer");
 const fileMetaInfoRoutes = express.Router();
 
 fileMetaInfoRoutes.get("/", fileMetaInfoController.getAll);
-fileMetaInfoRoutes.get("/:id", storageController.getPutPresignedUrl);
 module.exports = fileMetaInfoRoutes;
