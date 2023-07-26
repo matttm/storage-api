@@ -1,9 +1,9 @@
-const storageService = require("./storage.service");
+const fileMetaInfoService = require("./file-meta-info.service");
 
 function FileMetaInfoController() {
   const getAll = async (req, res) => {
     try {
-      const url = await storageService.getPutPresignedUrl(req.file);
+      const url = await fileMetaInfoService.getAll();
       return res.status(200).json({
         url,
       });

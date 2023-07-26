@@ -9,7 +9,9 @@ function FileMetaInfoService() {
       throw new Error("Error retrieving file meta info");
     }
   }
-  return Object.freeze({});
+  return Object.freeze({
+    getAll,
+  });
 }
 
 module.exports = FileMetaInfoService();
