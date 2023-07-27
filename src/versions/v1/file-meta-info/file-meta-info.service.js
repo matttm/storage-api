@@ -1,4 +1,4 @@
-const { FileMetaInfo } = require("../../../database");
+const { FileMetaInfo } = require("storage-db/src");
 
 function FileMetaInfoService() {
   function getAll() {

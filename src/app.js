@@ -1,4 +1,4 @@
-const { createDbInstance } = require("./database");
+const { createDbInstance } = require("storage-db/src");
 
 async function createApp() {
   const instance = await createDbInstance();
