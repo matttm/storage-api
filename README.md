@@ -10,6 +10,7 @@ Development: Active
 
 ## Cloud Architecture
 
+![Alt diagran](resources/storage.png)
 
 ## Contributing
 
