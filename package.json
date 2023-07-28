@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "storage-db": "matttm/storage-db#main",
     "@aws-sdk/client-config-service": "^3.363.0",
     "@aws-sdk/client-s3": "^3.363.0",
     "@aws-sdk/client-sqs": "^3.282.0",
