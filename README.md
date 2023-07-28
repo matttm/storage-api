@@ -1,8 +1,10 @@
-# blood-bank-api
+# storage-api
 
 Development: Active
 
 ## Description
+
+A web API responsible for generating presigned urls and transceiving files to S3. This API works with and without presigned urls to gain experience working with files.
 
 ## Getting Started
 
