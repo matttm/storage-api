@@ -5,6 +5,7 @@ Development: Active
 ## Description
 
 A web API responsible for generating presigned urls and transceiving files to S3. This API works with and without presigned urls to gain experience working with files.
+
 Once a file has been created/updated/deleted from S3 than an event is emited and triggers the `storage-svc`. This lambda handles all non-safe database actions (create, update, delete).
 
 ## Getting Started
