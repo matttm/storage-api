@@ -1,6 +1,6 @@
 # storage-api
 
-Development: Active
+Development: Inactive
 
 ## Description
 
